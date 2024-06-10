@@ -75,13 +75,13 @@ runs:
       id: platform
       shell: bash
       run: |
-        DEFAULT_TARGET=Win32
+        DEFAULT_TARGET=Win64
         if [ "$RUNNER_OS" = "Linux" ]; then
           ID=linux
           DEFAULT_TARGET=Android64
         elif [ "$RUNNER_OS" = "Windows" ]; then
           ID=win
-          DEFAULT_TARGET=Win32
+          DEFAULT_TARGET=Win64
         elif [ "$RUNNER_OS" = "macOS" ]; then
           ID=mac
           DEFAULT_TARGET=MacOS
