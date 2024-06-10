@@ -96,7 +96,7 @@ runs:
           OUTPUT_ID=android32
         elif [ "$TARGET" = "Android64" ]; then
           OUTPUT_ID=android64
-        elif [ "$TARGET" = "Win32" ]; then
+        elif [ "$TARGET" = "Win64" ]; then
           OUTPUT_ID=win
         elif [ "$TARGET" = "MacOS" ]; then
           OUTPUT_ID=mac
