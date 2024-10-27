@@ -31,7 +31,7 @@ jobs:
 
       - uses: actions/checkout@v4
         with:
-          repository: prevter/crashthegame
+          repository: prevter/textureldr
           path: textureldr
 
       - name: Build the mod
