@@ -82,7 +82,9 @@ https://github.com/geode-sdk/build-geode-mod/tree/main/examples
     build-config: RelWithDebInfo
     # Bundle the pdb inside the .geode file
     # Be warned, they can be quite big
-    export-pdb: true
+    package-pdb: true
+    # Alternatively use export-pdb to put the pdb beside .geode file:
+    # export-pdb: true
 ```
 
 # Combine

@@ -58,6 +58,10 @@ inputs:
     description: Whether to export PDB files for Windows builds. Defaults to false
     required: false
     default: false
+  package-pdb:
+    description: Whether to export PDB file for Windows builds and package it into geode file. Takes priority over 'export-pdb'. Defaults to false
+    required: false
+    default: false
   use-lto:
     description: Whether to use LTO (Link Time Optimization) via the CMAKE_INTERPROCEDURAL_OPTIMIZATION flag, improving build size. Defaults to true
     required: false
@@ -257,8 +261,15 @@ runs:
         done
 
         if [ ${{ steps.platform.outputs.id }} = "win" ]; then
-          if [ "${{ inputs.export-pdb }}" = "true" ]; then
+          if [ "${{ inputs.export-pdb }}" = "true" ] || [ "${{ inputs.package-pdb }}" = "true" ]; then
             for file in $(find ./build -name *.pdb); do
+              if [ "${{ inputs.package-pdb }}" = "true" ]; then
+                geode_file=$(echo $file | sed 's/\.pdb/.geode/')
+                zip -u $geode_file $file
+                cp $geode_file "${{ github.workspace }}/output"
+              else
+                cp $file "${{ github.workspace }}/output"
+              fi
               cp $file "${{ github.workspace }}/output"
             done
           fi
