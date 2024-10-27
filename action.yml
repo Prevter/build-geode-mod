@@ -251,14 +251,12 @@ runs:
         if [ "${{ inputs.use-lto }}" = "true" ]; then
           CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON"
         fi
-        CMAKE_COMPILER_ARGS="${{ inputs.build-args }}"
         if [ "${{ inputs.package-pdb }}" = "true" ] && [ ${{ steps.platform.outputs.id }} = "win" ]; then
           MOD_ID=$(jq -r '.id' mod.json) # note that this won't work for monorepos (sorry mat)
-          # add "/PDBALTPATH=geode/unzipped/$MOD_ID/$MOD_ID.pdb" to the linker flags
-          CMAKE_COMPILER_ARGS="$CMAKE_COMPILER_ARGS -Xlinker /PDBALTPATH=geode/unzipped/$MOD_ID/$MOD_ID.pdb"
+          CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DCMAKE_CXX_FLAGS='-Xlinker /PDBALTPATH=geode/unzipped/$MOD_ID/$MOD_ID.pdb'"
         fi
         cmake -B build -DCMAKE_BUILD_TYPE=${{ inputs.build-config }} -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DGEODE_CODEGEN_CMAKE_ARGS="-DCMAKE_C_COMPILER=clang;-DCMAKE_CXX_COMPILER=clang++;-G Ninja" -G Ninja $CMAKE_EXTRA_ARGS -DGEODE_DONT_INSTALL_MODS=ON -DGEODE_TARGET_PLATFORM=${{ steps.platform.outputs.target }} ${{ inputs.configure-args }}
-        cmake --build build --config ${{ inputs.build-config }} $CMAKE_COMPILER_ARGS
+        cmake --build build --config ${{ inputs.build-config }} ${{ inputs.build-args }}
 
         mkdir "${{ github.workspace }}/output"
 
